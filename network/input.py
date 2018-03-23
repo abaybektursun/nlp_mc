@@ -10,16 +10,11 @@ from six.moves       import xrange
 from google.protobuf import text_format
 
 #-------------------------------------------------------------------------------
+# Adopted from lm_1b_eval.py
 def LoadModel(gd_file, ckpt_file):
     """Load the model from GraphDef and Checkpoint.
-
-    Args:
-    gd_file: GraphDef proto text file.
-    ckpt_file: TensorFlow Checkpoint file.
-
-    Returns:
-    TensorFlow session and tensors dict.
-    """
+    Args: gd_file: GraphDef proto text file. ckpt_file: TensorFlow Checkpoint file.
+    Returns: TensorFlow session and tensors dict."""
     with tf.Graph().as_default():
         #class FastGFile: File I/O wrappers without thread locking.
         with tf.gfile.FastGFile(gd_file, 'r') as f:
@@ -51,7 +46,8 @@ def LoadModel(gd_file, ckpt_file):
                                          'char_inputs_in:0',
                                          'all_embs_out:0',
                                          'Reshape_3:0',
-                                         'global_step:0'], name='')
+                                         'global_step:0'], name='')	
+
 
         sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
         sess.run('save/restore_all', {'save/Const:0': ckpt_file})
@@ -152,8 +148,8 @@ color= ['cyan' if l == 'cosm' else 'grey' for l in annot]
 final_embeds = np.array(final_embeds)
 
 #-------------------------------------------------------------------------------
-
 # Visualize
+
 from sklearn.decomposition import PCA
 import matplotlib as mpl
 # Disable X server mode
@@ -170,3 +166,5 @@ for i, txt in enumerate(annot):
     ax.annotate(txt, (X_embedded[:, 0][i],X_embedded[:, 1][i]))
 
 plt.savefig('words.png')
+
+
